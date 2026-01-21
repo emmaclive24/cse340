@@ -1,4 +1,9 @@
--- 1. Insert a new record into the account table
+/* =====================================================
+   TASK 1 – QUERY 1
+   Insert Tony Stark into the account table
+   account_id and account_type handled automatically
+   ===================================================== */
+
 INSERT INTO account (
   account_firstname,
   account_lastname,
@@ -12,7 +17,13 @@ VALUES (
   'Iam1ronM@n'
 );
 
--- 2. Modify the Tony Stark record to change the account_type to 'Admin'
+
+/* =====================================================
+   TASK 1 – QUERY 2
+   Update Tony Stark account_type to Admin
+   Uses PRIMARY KEY via subquery
+   ===================================================== */
+
 UPDATE account
 SET account_type = 'Admin'
 WHERE account_id = (
@@ -21,7 +32,13 @@ WHERE account_id = (
   WHERE account_email = 'tony@starkent.com'
 );
 
--- 3. Delete the Tony Stark record from the database
+
+/* =====================================================
+   TASK 1 – QUERY 3
+   Delete Tony Stark record
+   Uses PRIMARY KEY via subquery
+   ===================================================== */
+
 DELETE FROM account
 WHERE account_id = (
   SELECT account_id
@@ -29,7 +46,13 @@ WHERE account_id = (
   WHERE account_email = 'tony@starkent.com'
 );
 
--- 4. Modify the "GM Hummer" description using PostgreSQL REPLACE
+
+/* =====================================================
+   TASK 1 – QUERY 4
+   Update GM Hummer description
+   Uses PostgreSQL REPLACE (no retyping description)
+   ===================================================== */
+
 UPDATE inventory
 SET inv_description = REPLACE(
   inv_description,
@@ -43,8 +66,13 @@ WHERE inv_id = (
     AND inv_model = 'Hummer'
 );
 
--- 5. Use an INNER JOIN to select make, model, and classification name
---    for inventory items in the "Sport" category
+
+/* =====================================================
+   TASK 1 – QUERY 5
+   INNER JOIN: inventory + classification
+   Select Sport category vehicles
+   ===================================================== */
+
 SELECT
   i.inv_make,
   i.inv_model,
@@ -54,7 +82,13 @@ INNER JOIN classification c
   ON i.classification_id = c.classification_id
 WHERE c.classification_name = 'Sport';
 
--- 6. Update all inventory image paths to include '/vehicles'
+
+/* =====================================================
+   TASK 1 – QUERY 6
+   Update image paths to include /vehicles
+   Single UPDATE query
+   ===================================================== */
+
 UPDATE inventory
 SET
   inv_image = REPLACE(inv_image, '/images/', '/images/vehicles/'),
