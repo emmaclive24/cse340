@@ -1,6 +1,7 @@
-/* ============================================
-   DROP EXISTING OBJECTS (SAFE REBUILD)
-   ============================================ */
+/* =====================================================
+   SAFE DATABASE REBUILD
+   Drops objects in correct dependency order
+   ===================================================== */
 
 DROP TABLE IF EXISTS inventory CASCADE;
 DROP TABLE IF EXISTS classification CASCADE;
@@ -8,9 +9,9 @@ DROP TABLE IF EXISTS account CASCADE;
 DROP TYPE IF EXISTS account_type;
 
 
-/* ============================================
+/* =====================================================
    CREATE TYPE
-   ============================================ */
+   ===================================================== */
 
 CREATE TYPE account_type AS ENUM (
   'Client',
@@ -19,9 +20,9 @@ CREATE TYPE account_type AS ENUM (
 );
 
 
-/* ============================================
-   CREATE TABLES
-   ============================================ */
+/* =====================================================
+   CREATE TABLE: account
+   ===================================================== */
 
 CREATE TABLE account (
   account_id SERIAL PRIMARY KEY,
@@ -32,10 +33,20 @@ CREATE TABLE account (
   account_type account_type DEFAULT 'Client'
 );
 
+
+/* =====================================================
+   CREATE TABLE: classification
+   ===================================================== */
+
 CREATE TABLE classification (
   classification_id SERIAL PRIMARY KEY,
   classification_name VARCHAR(50) NOT NULL
 );
+
+
+/* =====================================================
+   CREATE TABLE: inventory
+   ===================================================== */
 
 CREATE TABLE inventory (
   inv_id SERIAL PRIMARY KEY,
@@ -44,13 +55,14 @@ CREATE TABLE inventory (
   inv_description TEXT NOT NULL,
   inv_image VARCHAR(100) NOT NULL,
   inv_thumbnail VARCHAR(100) NOT NULL,
-  classification_id INT REFERENCES classification(classification_id)
+  classification_id INT NOT NULL
+    REFERENCES classification(classification_id)
 );
 
 
-/* ============================================
-   INSERT CLASSIFICATION DATA
-   ============================================ */
+/* =====================================================
+   INSERT DATA: classification
+   ===================================================== */
 
 INSERT INTO classification (classification_name)
 VALUES
@@ -60,9 +72,9 @@ VALUES
   ('Sedan');
 
 
-/* ============================================
-   INSERT INVENTORY DATA
-   ============================================ */
+/* =====================================================
+   INSERT DATA: inventory
+   ===================================================== */
 
 INSERT INTO inventory (
   inv_make,
@@ -84,7 +96,7 @@ VALUES
   (
     'Ferrari',
     '488 Spider',
-    'Fast Italian sports car',
+    'High-performance Italian sports car',
     '/images/ferrari-488.jpg',
     '/images/ferrari-488-tn.jpg',
     1
@@ -92,17 +104,17 @@ VALUES
   (
     'Porsche',
     '911',
-    'Legendary sports car',
+    'Legendary German sports car',
     '/images/porsche-911.jpg',
     '/images/porsche-911-tn.jpg',
     1
   );
 
 
-/* ============================================
-   TASK 1 – QUERY #4 (MUST BE LAST SECTION)
-   Update GM Hummer description
-   ============================================ */
+/* =====================================================
+   TASK 1 – QUERY #4 (REQUIRED BY RUBRIC)
+   MUST RUN AFTER DATA INSERT
+   ===================================================== */
 
 UPDATE inventory
 SET inv_description = REPLACE(
@@ -114,10 +126,10 @@ WHERE inv_make = 'GM'
   AND inv_model = 'Hummer';
 
 
-/* ============================================
-   TASK 1 – QUERY #6 (FINAL QUERY)
-   Update image paths
-   ============================================ */
+/* =====================================================
+   TASK 1 – QUERY #6 (FINAL QUERY IN FILE)
+   MUST BE LAST STATEMENT
+   ===================================================== */
 
 UPDATE inventory
 SET
