@@ -1,5 +1,5 @@
 // database/index.js
-const { Pool } = require("pg");
+/*const { Pool } = require("pg");
 require("dotenv").config();
 
 /* ***************
@@ -7,7 +7,7 @@ require("dotenv").config();
  * SSL Object needed for local testing of app
  * But will cause problems in production environment
  * If - else will make determination which to use
- * *************** */
+ * *************** 
 let pool;
 
 if (process.env.NODE_ENV === "development") {
@@ -36,4 +36,23 @@ if (process.env.NODE_ENV === "development") {
     connectionString: process.env.DATABASE_URL,
   });
   module.exports = pool;
-}
+}  */ 
+const { Pool } = require("pg");
+
+const pool = new Pool({
+  connectionString: "postgresql://db_340_db_x8w1_user:t27ktNtUXobTBweidE9bAQwOOF78TNTV@dpg-d5tjvbcr85hc73fa03k0-a/db_340_db_x8w1",
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+pool.on("connect", () => {
+  console.log("PostgreSQL connected successfully");
+});
+
+pool.on("error", (err) => {
+  console.error("Unexpected DB error", err);
+  process.exit(1);
+});
+
+module.exports = pool;
