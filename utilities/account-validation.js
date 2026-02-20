@@ -105,7 +105,13 @@ validate.updatePasswordRules = () => {
  * Check Update Data
  * ***************************** */
 validate.checkUpdateData = async (req, res, next) => {
-  const { account_firstname, account_lastname, account_email, account_id } = req.body
+  // Pull from req.body; fall back to JWT-stored accountData for display fields
+  const jwtData = res.locals.accountData || {}
+  const account_firstname = req.body.account_firstname || jwtData.account_firstname
+  const account_lastname  = req.body.account_lastname  || jwtData.account_lastname
+  const account_email     = req.body.account_email     || jwtData.account_email
+  const account_id        = req.body.account_id        || jwtData.account_id
+
   let errors = validationResult(req)
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav()

@@ -115,7 +115,7 @@ async function editAccountView(req, res, next) {
     account_firstname: accountData.account_firstname,
     account_lastname: accountData.account_lastname,
     account_email: accountData.account_email,
-    account_id: account_id
+    account_id: accountData.account_id,
   })
 }
 

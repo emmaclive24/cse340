@@ -562,3 +562,47 @@ hr {
   background: #eee;
   margin: 2rem 0;
 }
+/* --- Inline error messages --- */
+.error-msg {
+  color: #c0392b;
+  font-size: 0.85rem;
+  display: block;
+  margin-top: 4px;
+}
+
+/* --- Account management view --- */
+.account-actions {
+  max-width: 600px;
+  margin: 1.5rem auto;
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.account-actions h2 {
+  color: #333;
+  border-bottom: 3px solid #4bc2e3;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.account-actions h3 {
+  margin-top: 1.5rem;
+  color: #444;
+}
+
+.account-actions p {
+  margin: 0.5rem 0;
+}
+
+.account-actions a {
+  color: #4bc2e3;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.account-actions a:hover {
+  text-decoration: underline;
+}

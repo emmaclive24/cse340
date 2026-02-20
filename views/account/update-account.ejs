@@ -15,22 +15,22 @@
 <div class="update-container">
   <section class="update-section">
     <h2>Account Update</h2>
-    <form action="/account/update-info" method="post">
+    <form action="/account/update-info" method="post" id="updateForm" novalidate>
       <label for="account_firstname">First Name</label>
-      <input type="text" name="account_firstname" id="account_firstname" required 
-        value="<%= locals.accountData ? locals.accountData.account_firstname : (locals.firstname ? locals.firstname : '') %>">
+      <input type="text" name="account_firstname" id="account_firstname" required
+        value="<%= typeof account_firstname !== 'undefined' ? account_firstname : (locals.accountData ? locals.accountData.account_firstname : '') %>">
 
       <label for="account_lastname">Last Name</label>
-      <input type="text" name="account_lastname" id="account_lastname" required 
-        value="<%= locals.accountData ? locals.accountData.account_lastname : (locals.lastname ? locals.lastname : '') %>">
+      <input type="text" name="account_lastname" id="account_lastname" required
+        value="<%= typeof account_lastname !== 'undefined' ? account_lastname : (locals.accountData ? locals.accountData.account_lastname : '') %>">
 
       <label for="account_email">Email Address</label>
-      <input type="email" name="account_email" id="account_email" required 
-        value="<%= locals.accountData ? locals.accountData.account_email : (locals.email ? locals.email : '') %>">
+      <input type="email" name="account_email" id="account_email" required
+        value="<%= typeof account_email !== 'undefined' ? account_email : (locals.accountData ? locals.accountData.account_email : '') %>">
 
       <input type="submit" value="Update Account">
-      <input type="hidden" name="account_id" 
-        value="<%= locals.accountData ? locals.accountData.account_id : (locals.account_id ? locals.account_id : '') %>">
+      <input type="hidden" name="account_id"
+        value="<%= typeof account_id !== 'undefined' ? account_id : (locals.accountData ? locals.accountData.account_id : '') %>">
     </form>
   </section>
 
@@ -41,14 +41,52 @@
     <p>Passwords must be at least 12 characters and include at least 1 number, 1 capital letter and 1 special character.</p>
     <p><em>Note: Entering a password here will change your current password.</em></p>
     
-    <form action="/account/update-password" method="post">
+    <form action="/account/update-password" method="post" id="passwordForm" novalidate>
       <label for="account_password">New Password</label>
-      <input type="password" name="account_password" id="account_password" 
+      <input type="password" name="account_password" id="account_password"
         pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required>
+      <span id="pwdError" class="error-msg" aria-live="polite"></span>
 
       <input type="submit" value="Change Password">
-      <input type="hidden" name="account_id" 
-        value="<%= locals.accountData ? locals.accountData.account_id : (locals.account_id ? locals.account_id : '') %>">
+      <input type="hidden" name="account_id"
+        value="<%= typeof account_id !== 'undefined' ? account_id : (locals.accountData ? locals.accountData.account_id : '') %>">
     </form>
   </section>
 </div>
+
+<script>
+  /* Client-side validation for account update form */
+  const updateForm = document.getElementById('updateForm');
+  updateForm.addEventListener('submit', function(e) {
+    let valid = true;
+    const fname = document.getElementById('account_firstname').value.trim();
+    const lname = document.getElementById('account_lastname').value.trim();
+    const email = document.getElementById('account_email').value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!fname) { alert('First name is required.'); valid = false; }
+    else if (!lname) { alert('Last name is required.'); valid = false; }
+    else if (!email || !emailPattern.test(email)) { alert('A valid email address is required.'); valid = false; }
+    if (!valid) e.preventDefault();
+  });
+
+  /* Client-side validation for password form */
+  const passwordForm = document.getElementById('passwordForm');
+  const pwdInput = document.getElementById('account_password');
+  const pwdError = document.getElementById('pwdError');
+  const pwdPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!\s).{12,}$/;
+
+  pwdInput.addEventListener('input', function() {
+    if (this.value && !pwdPattern.test(this.value)) {
+      pwdError.textContent = 'Password must be 12+ chars with uppercase, lowercase, number, and special character.';
+    } else {
+      pwdError.textContent = '';
+    }
+  });
+
+  passwordForm.addEventListener('submit', function(e) {
+    if (!pwdPattern.test(pwdInput.value)) {
+      pwdError.textContent = 'Password must be 12+ chars with uppercase, lowercase, number, and special character.';
+      e.preventDefault();
+    }
+  });
+</script>

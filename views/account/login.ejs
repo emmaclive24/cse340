@@ -15,7 +15,7 @@
 <div class="login-container">
   <form action="/account/login" method="post">
     <label for="account_email">Email Address</label>
-    <input type="email" name="account_email" id="account_email" required value="<%= locals.account_email %>">
+    <input type="email" name="account_email" id="account_email" required value="<%= locals.account_email || '' %>">
 
     <label for="account_password">Password</label>
     <span class="password-requirement">Passwords must be at least 12 characters and include at least 1 number, 1 capital letter and 1 special character</span>
